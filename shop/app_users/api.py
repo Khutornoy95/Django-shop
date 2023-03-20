@@ -4,6 +4,6 @@ from .serializers import UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all()  # отфильтровать
     fields = ['fullName', 'email', 'phone', 'avatar']
     serializer_class = UserSerializer
