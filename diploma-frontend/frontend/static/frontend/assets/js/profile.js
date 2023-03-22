@@ -16,12 +16,14 @@ var mix = {
                 return
             }
 
-            this.postData('/api/profile', {
+            this.postData('/api/profile/', {
                 fullName: this.fullName,
                 avatar: this.avatar,
                 phone: this.phone,
                 email: this.email
-            }).then(data => {
+            }, {headers: {
+                    'X-CSRFToken': this.getCookie('csrftoken')
+            },}).then(data => {
                alert('Успешно сохранено')
             }).catch(() => {
                 console.warn('Ошибка при обновлении профиля')
@@ -37,7 +39,9 @@ var mix = {
                 alert('В форме присутствуют незаполненные поля или пароли не совпадают')
                 return
             }
-            this.postData('/api/profile/password').then(data => {
+            this.postData('/api/profile/password',{headers: {
+            'X-CSRFToken': this.getCookie('csrftoken')
+            },}).then(data => {
                alert('Успешно сохранено')
                 this.passwordCurrent = ''
                 this.password = ''
