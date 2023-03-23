@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'frontend',
     'rest_framework',
     'app_users',
+    'app_categories',
+
 ]
 
 MIDDLEWARE = [
@@ -130,5 +132,5 @@ AUTH_USER_MODEL = 'app_users.CustomUser'
 APPEND_SLASH = False
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'avatars/')
-MEDIA_URL = '/avatars/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
