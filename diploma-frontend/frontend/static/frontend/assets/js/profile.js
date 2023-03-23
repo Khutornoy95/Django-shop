@@ -39,9 +39,7 @@ var mix = {
                 alert('В форме присутствуют незаполненные поля или пароли не совпадают')
                 return
             }
-            this.postData('/api/profile/password',{headers: {
-            'X-CSRFToken': this.getCookie('csrftoken')
-            },}).then(data => {
+            this.postData('/api/profile/password').then(data => {
                alert('Успешно сохранено')
                 this.passwordCurrent = ''
                 this.password = ''

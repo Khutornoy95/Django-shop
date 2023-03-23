@@ -9,5 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PasswordSerializer(serializers.ModelSerializer):
-    model = CustomUser
-    fields = ['password']
+    class Meta:
+        model = CustomUser
+        fields = ['password']
