@@ -9,7 +9,7 @@ from .managers import CustomUserManager
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     image_validator = FileExtensionValidator(
         allowed_extensions=['png', 'jpg', 'gif'],
-        message='Расширение не поддерживается. Разрешённые расширения .jpg .gif .png'
+        message='Расширение не поддерживается. Разрешённые расширения .jpg .gif .PNG'
     )
 
     def validate_image_size(fieldfile_obj):
@@ -21,7 +21,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     fullName = models.CharField(max_length=200, verbose_name='Полное имя')
     email = models.EmailField(unique=True, verbose_name='Email')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
-    avatar = models.ImageField(upload_to='avatars/', blank=True, verbose_name='Аватар',
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name='Аватар',
                                validators=[validate_image_size, image_validator])
     phoneNumberRegex = RegexValidator(regex=r"^\d{10}$")
     phone = models.CharField(validators=[phoneNumberRegex], max_length=10, unique=True, verbose_name='Телефон')
