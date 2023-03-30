@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'frontend',
     'rest_framework',
     'app_users',
-    'app_categories',
-
+    'app_catalog',
+    'app_products',
 ]
 
 MIDDLEWARE = [
