@@ -1,11 +1,6 @@
-from .models import Product, Review, Tag, Specification
+from .models import Product, Review, Tag, Specification, Sale
 from rest_framework import serializers
 
-
-# class ImageSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ImageProduct
-#         fields = ['image']
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,6 +39,11 @@ class ProductShotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-
         fields = ['id', 'category', 'price', 'count', 'date', 'title', 'description',
                   'href', 'freeDelivery', 'images', 'tags', 'reviews', 'rating']
+
+
+class SaleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sale
+        fields = ['id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'href', 'images']

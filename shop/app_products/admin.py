@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, ImageProduct, Tag, Review, Specification
+from .models import Product, ImageProduct, Tag, Review, Specification, Sale
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -22,8 +22,13 @@ class SpecificationAdmin(admin.ModelAdmin):
     list_display = ('product', 'name', 'value')
 
 
+class SaleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'salePrice', 'dateFrom', 'dateTo')
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ImageProduct, ImageProductAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Specification, SpecificationAdmin)
+admin.site.register(Sale, SaleAdmin)

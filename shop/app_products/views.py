@@ -1,8 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import Product, Tag, Review
-from .serializers import ProductSerializer, TagSerializer, ReviewSerializer
+from .models import Product, Tag, Review, Sale
+from .serializers import ProductSerializer, TagSerializer, \
+    ReviewSerializer, ProductShotSerializer, SaleSerializer
 
 
 class ProductView(APIView):
@@ -38,4 +39,29 @@ class ReviewView(APIView):
 
 class PopularView(APIView):
     def get(self, request):
-        pass
+        products = Product.objects.all()
+        products = products.order_by('rating')[:8]
+        serializer = ProductShotSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+class LimitedView(APIView):
+    def get(self, request):
+        products = Product.objects.all().filter(limited=True)[:16]
+        serializer = ProductShotSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+class SalesView(APIView):
+    def get(self, request):
+        sales = Sale.objects.all(). select_related('id')
+        serializer = SaleSerializer(sales, many=True)
+        print(serializer.data)
+        return Response(serializer.data)
+
+
+class BannersView(APIView):
+    def get(self, request):
+        products = Product.objects.all().order_by('-date')
+        serializer = ProductShotSerializer(products, many=True)
+        return Response(serializer.data)

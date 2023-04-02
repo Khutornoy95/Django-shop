@@ -17,6 +17,7 @@ class Product(models.Model):
     freeDelivery = models.BooleanField(verbose_name='Бесплатная доставка')
     available = models.BooleanField(verbose_name='Доступность', default=True)
     rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг', default=0)
+    limited = models.BooleanField(default=False, verbose_name='Ограниченная серия')
 
     def href(self):
         return f"/catalog/{self.pk}"
@@ -27,8 +28,6 @@ class Product(models.Model):
 
     def set_rating(self):
         qs = Review.objects.filter(product=self.pk).values('product').annotate(rate_avg=Avg('rate'))
-        # if len(qs) == 1:
-        #     self.rating = qs[0]['rate_avg']
         self.rating = qs[0]['rate_avg']
         self.save()
 
@@ -91,3 +90,31 @@ class Specification(models.Model):
     class Meta:
         verbose_name = 'Характеристика'
         verbose_name_plural = 'Характеристики'
+
+
+class Sale(models.Model):
+    id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sale',
+                           verbose_name='Продукт', primary_key=True)
+    salePrice = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена со скидкой')
+    dateFrom = models.DateField(verbose_name='Начало действия')
+    dateTo = models.DateField(verbose_name='Конец действия')
+
+    @property
+    def price(self):
+        return self.id.price
+
+    @property
+    def title(self):
+        return self.id.title
+
+    @property
+    def href(self):
+        return self.id.href
+
+    @property
+    def images(self):
+        return self.id.images
+
+    class Meta:
+        verbose_name = 'Акция'
+        verbose_name_plural = 'Акции'
