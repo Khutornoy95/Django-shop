@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'app_users',
     'app_catalog',
     'app_products',
+    'app_basket',
+    'app_orders'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +136,5 @@ APPEND_SLASH = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+CART_SESSION_ID = 'cart'

@@ -42,22 +42,24 @@ class CatalogView(ListAPIView, GenericAPIView):
     pagination_class = CatalogResultsSetPagination
 
     def get_queryset(self):
-        queryset = Product.objects.select_related('category').prefetch_related('tags')
-
+        queryset = Product.objects.select_related('category').prefetch_related('tag')
         item_name = self.request.query_params.get('filter[name]')
         sort_by = self.request.query_params.get('sort')
         free_delivery = self.request.query_params.get('filter[freeDelivery]')
         available = self.request.query_params.get('filter[available]')
         minPrice = self.request.query_params.get('filter[minPrice]')
         maxPrice = self.request.query_params.get('filter[maxPrice]')
-        tags = self.request.query_params.get('tags[]')
+        tags = self.request.query_params.getlist('tags[]')
         sort_type = self.request.query_params.get('sortType')
         if sort_type == 'dec':
             sort_type = '-'
         else:
             sort_type = ''
-        if minPrice and maxPrice:
-            queryset = queryset.filter(price__range=(minPrice, maxPrice))
+        # if minPrice and maxPrice:
+        #     queryset = queryset.filter(price__range=(minPrice, maxPrice))
+        #     print(self.request.query_params.get('filter[minPrice]'))
+        #     print(self.request.query_params.get('filter[maxPrice]'))
+
         if available == 'true':
             queryset = queryset.filter(available=True)
         if free_delivery == 'true':
@@ -67,7 +69,7 @@ class CatalogView(ListAPIView, GenericAPIView):
         if item_name:
             queryset = queryset.filter(title__icontains=item_name)
         if tags:
-            queryset = queryset.filter(tags__id__contains=tags)
+            queryset = queryset.filter(tag__id__in=tags)
         if sort_by:
             queryset = queryset.order_by(f"{sort_type}{sort_by}")
         return queryset

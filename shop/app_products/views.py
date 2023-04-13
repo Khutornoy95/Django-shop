@@ -10,7 +10,7 @@ class ProductView(APIView):
     def get(self, request, pk):
         product = Product.objects.filter(pk=pk).\
             select_related('category').\
-            prefetch_related('image', 'tags', 'reviews', 'specifications').first()
+            prefetch_related('image', 'tag', 'reviews', 'specifications').first()
         serializer = ProductSerializer(product)
         return Response(serializer.data)
 
@@ -19,6 +19,7 @@ class TagsView(APIView):
     def get(self, request):
         tags = Tag.objects.all()
         serializer = TagSerializer(tags, many=True)
+
         return Response(serializer.data)
 
 

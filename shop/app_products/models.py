@@ -26,6 +26,10 @@ class Product(models.Model):
     def images(self):
         return [str(img) for img in self.image.all()]
 
+    @property
+    def tags(self):
+        return [str(tag) for tag in self.tag.all()]
+
     def set_rating(self):
         qs = Review.objects.filter(product=self.pk).values('product').annotate(rate_avg=Avg('rate'))
         self.rating = qs[0]['rate_avg']
@@ -49,8 +53,11 @@ class ImageProduct(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=20, verbose_name='Тег')
-    product = models.ManyToManyField(Product, related_name='tags', blank=True, null=True)
+    product = models.ManyToManyField(Product, related_name='tag', blank=True, null=True)
     id = models.SlugField(unique=True, primary_key=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = 'Тег'
