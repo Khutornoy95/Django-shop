@@ -11,9 +11,9 @@ class OrdersView(APIView):
         return Response()
 
     def post(self, request):
-        cart = Cart(request)
+        # cart = Cart(request)
         order = Order.objects.create(user=self.request.user)
-        cart.cart['orderId'] = order.pk
+
         for item in request.data:
             orderItem = OrderItem.objects.create(order=order, product=Product.objects.filter(id=int(item['id'])).first(),
                                                  price=float(item['price']), count=int(item['count']))
@@ -25,12 +25,11 @@ class OrdersView(APIView):
 
 class OrderActiveView(APIView):
     def get(self, request):
-        cart = Cart(request)
         print('orders/active', request.query_params, request.data)
-
-        order = Order.objects.all().filter(pk=cart.cart['orderId']).first()
+        order = Order.objects.all().first()
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request, pk):
+        print('gsahgsfhshsh')
         pass
