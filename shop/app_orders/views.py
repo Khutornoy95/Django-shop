@@ -8,28 +8,53 @@ from .serializers import OrderSerializer
 
 class OrdersView(APIView):
     def get(self, request):
-        return Response()
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
-        # cart = Cart(request)
         order = Order.objects.create(user=self.request.user)
-
         for item in request.data:
             orderItem = OrderItem.objects.create(order=order, product=Product.objects.filter(id=int(item['id'])).first(),
                                                  price=float(item['price']), count=int(item['count']))
         serializer = OrderSerializer(order)
-        print('post orders')
-        print('Итог', serializer.data)
         return Response(serializer.data)
 
 
 class OrderActiveView(APIView):
     def get(self, request):
-        print('orders/active', request.query_params, request.data)
         order = Order.objects.all().first()
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
+
+class OrderView(APIView):
     def post(self, request, pk):
-        print('gsahgsfhshsh')
-        pass
+        order = Order.objects.filter(pk=pk).first()
+        order.deliveryType = request.data['deliveryType']
+        order.paymentType = request.data['paymentType']
+        order.totalCost = request.data['totalCost']
+        order.status = request.data['status']
+        order.city = request.data['city']
+        order.address = request.data['address']
+        order.save()
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
+
+    def get(self, request, pk):
+        order = Order.objects.filter(pk=pk).first()
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
+
+
+class PaymentView(APIView):
+    def post(self, request):
+        cart = Cart(request)
+        cart.clear()
+        cart.save()
+        print(request.data)
+        return Response()
+
+    def get(self, request):
+        print('фронт говно')
+        return Response()
